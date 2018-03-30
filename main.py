@@ -1,14 +1,24 @@
 import boto3
+import json
 
 def lambda_handler(event,context):
-
+	print event
+	# print json.loads(event)
+	# message = event['Records'][0]['Sns']['Message']
+	message = json.loads(event['Records'][0]['Sns']['Message'])
+	print message
+	# metadata=json.loads(message.NotificationMetadata)
+	metadata = json.loads(message['NotificationMetadata'])
+	print metadata
+	
+	instanceId = message['EC2InstanceId'];
 	ec2Client = boto3.client('ec2')
 	ec2 = boto3.resource('ec2')
-	# sgID = metadata.SecurityGroups
-	sgID = event['SecurityGroups']
+	sgID = metadata['SecurityGroups']
+	#sgID = event['SecurityGroups']
 	print sgID
-	# subnetID = metadata.SubnetId
-	subnetID = event['SubnetId']
+	subnetID = metadata['SubnetId']
+	#subnetID = event['SubnetId']
 	print subnetID
 	response = ec2Client.create_network_interface(Groups=[sgID],SubnetId=subnetID)
 
@@ -24,7 +34,7 @@ def lambda_handler(event,context):
 
 	network_interface.attach(
 	    DeviceIndex=1,
-	    InstanceId='i-0233bf7c4ffd9b062',
+	    InstanceId=instanceId,
 
 	)
-	return
+	return eniID #optional
