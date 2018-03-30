@@ -1,7 +1,9 @@
 # asgHookENI
 
+A lambda function that gets triggered via a lifecycle hook to attach a secondary elastic network interface to instances that are added to the auto scaling group.
 
-## Steps
+
+## Setup Steps
 
 * Create lamba funcation - main.py
 * Create an SNS topic
