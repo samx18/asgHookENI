@@ -1,4 +1,5 @@
 {
-  "SubnetId":"subnet-9fb0a9e8",
-  "SecurityGroups":["sg-51b82836"]
+  "SubnetId":"subnet-xxxxx",
+  "SecurityGroups":["sg-xxxxxxxxx"],
+  "EC2InstanceId" : "i-0xxxxxxxxxxx"
 }

@@ -1,25 +1,31 @@
+# Copyright 2018 Sam Palani under MIT License https://opensource.org/licenses/MIT
+
+
 import boto3
 import json
 
 def lambda_handler(event,context):
 	print event
-	# print json.loads(event)
-	# message = event['Records'][0]['Sns']['Message']
+	# Debug -- print json.loads(event)
+	
+	# Parse message portion from the event
+	
 	message = json.loads(event['Records'][0]['Sns']['Message'])
-	print message
-	# metadata=json.loads(message.NotificationMetadata)
+	# Debug --  print message
+	
+	# Parse the metadata portion from the event - Metadata is sent from the lifecyclehook
+
 	metadata = json.loads(message['NotificationMetadata'])
-	print metadata
+	# Debug -- print metadata
 	
 	instanceId = message['EC2InstanceId'];
+	
+	# Get a EC2 client and a EC2 Resource 	
 	ec2Client = boto3.client('ec2')
 	ec2 = boto3.resource('ec2')
+	
 	sgID = metadata['SecurityGroups']
-	#sgID = event['SecurityGroups']
-	print sgID
 	subnetID = metadata['SubnetId']
-	#subnetID = event['SubnetId']
-	print subnetID
 	response = ec2Client.create_network_interface(Groups=[sgID],SubnetId=subnetID)
 
 	# get the networkwork interface id for the eni created above
@@ -37,4 +43,4 @@ def lambda_handler(event,context):
 	    InstanceId=instanceId,
 
 	)
-	return eniID #optional
+	return eniID #optional for debugging
